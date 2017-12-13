@@ -8,6 +8,7 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const path = require('path');
+const session = require('express-session');
 
 // file requires below
 let webpackConfigPath;
@@ -19,7 +20,9 @@ if (process.env.DEVELOPMENT) {
 const config = require(webpackConfigPath);
 const compiler = webpack(config);
 // endpoints
-const login = require('./routes/login.js').login;
+// const signup = require('./routes/auth.js').signup;
+// const login = require('./routes/auth.js').login;
+const auth = require('./routes/auth.js').auth;
 const search = require('./routes/search.js').search;
 const refinedSearch = require('./routes/refinedSearch').refinedSearch;
 const favorites = require('./routes/favorites').favorites;
@@ -43,6 +46,7 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 
 app.use(webpackHotMiddleware(compiler));
+app.use(session({secret:"killersecret", resave:false, saveUninitialized:true}))
 
 app.set('port', (process.env.PORT || 1111));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -53,7 +57,9 @@ const port = app.get('port');
 app.use(express.static(__dirname + '/../public/dist'));
 
 //Below is the convention for integrating the different endpoint files
-app.use('/api/login', login);
+app.use('/api/auth', auth);
+// app.use('/api/auth/signup', signup);
+// app.use('/api/auth/login', login);
 app.use('/api/search', search);
 app.use('/api/refinedSearch', refinedSearch);
 app.use('/api/favorites', favorites);

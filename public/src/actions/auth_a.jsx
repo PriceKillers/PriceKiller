@@ -16,7 +16,7 @@ export function receiveSignup(user) {
   return {
     type: SIGNUP_SUCCESS,
     isAuthenticated: true,
-    id_token: user.id_token
+    user: user
   }
 };
 
@@ -32,28 +32,15 @@ export function signupError(message) {
 /**** SIGNUP API CALL ****/
 //Calls the API go get a token and dispatches along the way
 export function signupUser(creds) {
-  let config = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-    body: `username=${creds.username}&password=${creds.password}`
-  };
-
+  let header = {'Content-Type': 'application/x-www-form-urlencoded'};
   return dispatch => {
     dispatch(requestSignup(creds));
-
-    //need to switch to axios call
-    return fetch('/users', config)
-      .then(res => res.json().then(user => ({user, res})))
-      .then(({user, res}) => {
-        if (!res.ok) {
-          dispatch(signupError(user.message));
-          return Promise.reject(user);
-        } else {
-          localStorage.setItem('id_token', user.id_token);
-          localStorage.setItem('access_token', user.access_token);
-          dispatch(receiveSignup(user));
-        }})
-      .catch(err => console.log('signup API public error', err))
+    axios.post('/api/auth/signup', {username: creds.username, password: creds.password})
+    .then(res => {
+      // console.log('signup res in action', res);
+        dispatch(receiveSignup(res.data));
+      // }
+    }).catch(err => {console.log('signup API public error', err)});
   }
 }
 
@@ -73,7 +60,7 @@ export function receiveLogin(user) {
   return {
     type: LOGIN_SUCCESS,
     isAuthenticated: true,
-    id_token: user.id_token
+    user: user
   }
 };
 
@@ -89,30 +76,18 @@ export function loginError(message) {
 /**** LOGIN API CALL ****/
 //Calls the API go get a token and dispatches along the way
 export function loginUser(creds) {
-  let config = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-    body: `username=${creds.username}&password=${creds.password}`
-  };
-
+  let header = {'Content-Type': 'application/x-www-form-urlencoded'};
   return dispatch => {
     dispatch(requestLogin(creds));
-
-    //need to switch to axios call
-    return fetch('/sessions/create', config)
-      .then(res => res.json().then(user => ({user, res})))
-      .then(({user, res}) => {
-        if (!res.ok) {
-          dispatch(loginError(user.message));
-          return Promise.reject(user);
-        } else {
-          localStorage.setItem('id_token', user.id_token);
-          localStorage.setItem('access_token', user.access_token);
-          dispatch(receiveLogin(user));
-        }})
-      .catch(err => console.log('login API public error', err))
+    axios.post('/api/auth/login', {username: creds.username, password: creds.password})
+    .then(res => {
+      console.log('login res in action', res);
+        dispatch(receiveLogin(res.data));
+      // }
+    }).catch(err => {console.log('signup API public error', err)});
   }
 }
+
 
 /**** LOGOUT ACTIONS ****/
 //remove token from localStorage
@@ -140,3 +115,63 @@ export function logoutUser() {
     dispatch(receiveLogout());
   }
 };
+
+/**** Lock ****/
+export const SHOW_LOCK = 'SHOW_LOCK';
+export function showLock() {
+  return {
+    type: SHOW_LOCK
+  }
+};
+
+export const LOCK_SUCCESS = 'LOCK_SUCCESS';
+export function lockSuccess(profile, token) {
+  return {
+    type: LOCK_SUCCESS,
+    profile,
+    token
+  }
+};
+
+export const LOCK_ERROR = 'LOCK_ERROR';
+export function lockError(err) {
+  return {
+    type: LOCK_ERROR,
+    err
+  }
+};
+
+/*
+// console.log('auth id', process.env, 'auth domain', process.env.AUTH_DOMAIN)
+// const lock = new Auth0Lock(process.env.AUTH_ID, process.env.AUTH_DOMAIN);
+const lock = new Auth0Lock('FTYdG4IJsEBoitw1MRvFqxcd94F150Oq', 'pricekiller.auth0.com',
+  {allowedConnections: ['Username-Password_Authentication', 'google-oauth2'],
+  rememberLastLogin: false,
+  socialButtonStyle: 'big',
+  languageDictionary: {'title': 'Auth0'},
+  language: 'en',
+  theme: {}
+  });
+  */
+
+export function login() {
+  return dispatch => {
+    // console.log('dispatch', dispatch)
+    // lock.show();
+  }
+};
+
+/*
+export function doAuthentication() {
+  return dispatch => {
+    lock.on("authenticated", function(authResult) {
+      lock.getProfile(authResult.idToken, function(error, profile) {
+        if (error) { return dispatch(lockError(error)); }
+        localStorage.setItem('profile', JSON.stringify(profile));
+        localStorage.setItem('id_token', authResult.idToken);
+        return dispatch(lockSuccess(profile))
+      });
+    });
+  }
+}
+*/

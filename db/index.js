@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 
 const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_SERVER}`;
 
@@ -65,7 +66,30 @@ const User = mongoose.model('User', UserSchema);
 const CronJob = mongoose.model('CronJob', CronJobSchema);
 const ProductAuctions = mongoose.model('ProductAuctions', ProductAuctionsSchema);
 
+const checkUser = (username, cb) => {
+  User.findOne({username: username}, (err, user) =>cb(err, user))
+}
+
+const saveNewUser = (user, cb) => {
+  bcrypt.genSalt(5, (err, salt) => {
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      console.log('after hash', user.sessionID)
+      // console.log('username', user.username)
+      let newUser = new User( {
+        username: user.username,
+        password: hash,
+        favorites: []
+      })
+      newUser.save(cb);
+      console.log('newuser', newUser);
+    })
+  })
+}
+
 
 module.exports.User = User;
 module.exports.CronJob = CronJob;
 module.exports.ProductAuctions = ProductAuctions;
+// module.exports.Product = Product;
+module.exports.checkUser = checkUser;
+module.exports.saveNewUser = saveNewUser;
