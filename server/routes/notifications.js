@@ -41,8 +41,14 @@ router.post('/', (req, res, next) => {
 router.put('/', (req, res, next) => {
   const username = req.body.username;
   const preference = req.body.preference;
-  db.User.update({username}, {
-    subscription: preference
+  db.User.findOneAndUpdate(
+    { username },
+    { subscription: preference },
+    { new: true },
+    (error, updatedUser) => {
+      if (error) {
+        console.log(error);
+      }
   });
   res.send('success');
 });

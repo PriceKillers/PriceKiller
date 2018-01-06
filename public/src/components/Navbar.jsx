@@ -171,6 +171,7 @@ class Navbar extends Component {
                     onClick={(e) => {
                       this.activateMenu(e);
                       this.props.hideSearchResults();
+                      document.getElementById("sidenav").style.width = 0;
                     }}
                   >
                     Chart
@@ -181,6 +182,7 @@ class Navbar extends Component {
                     onClick={(e) => {
                       this.activateMenu(e)
                       this.props.hideSearchResults();
+                      document.getElementById("sidenav").style.width = 0;
                     }}
                   >
                     Getting Started
@@ -191,6 +193,7 @@ class Navbar extends Component {
                     onClick={(e) => {
                       this.activateMenu(e);
                       this.props.hideSearchResults();
+                      document.getElementById("sidenav").style.width = 0;
                     }}
                   >
                     Who We Are

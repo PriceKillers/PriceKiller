@@ -17,6 +17,7 @@ export function updateNotificationPref(preference, username) {
     })
       .then((response) => {
         dispatch(setNotificationsPref(preference));
+        alert('Your preferences have been updated!');
       })
   }
 }

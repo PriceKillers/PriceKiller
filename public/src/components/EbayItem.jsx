@@ -58,7 +58,9 @@ class EbayItem extends Component {
       return (
         <li className="columns is-mobile is-centered">
           <div className="column is-one-quarters">
-            <a href={item.viewItemURL[0]}><img className="image is-128x128" src={image} /></a>
+            <a href={item.viewItemURL[0]} target="_blank">
+              <img className="image is-128x128" src={image} />
+            </a>
           </div>
           <div className="column is-two-quarters">
             {item.title}

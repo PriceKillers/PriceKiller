@@ -73,6 +73,38 @@ const Sidebar = (props) => {
     }
   }
 
+  let subYesInput;
+  let subNoInput;
+  if (props.notificationPref) {
+    subYesInput = <input
+                  type="radio"
+                  name="subscription"
+                  className="subYes"
+                  checked
+                  onChange={() => {props.receiveNotifications(props.username)}}
+                />
+    subNoInput = <input
+                  type="radio"
+                  name="subscription"
+                  className="subNo"
+                  onChange={() => {props.stopNotifications(props.username)}}
+                />
+  } else {
+    subYesInput = <input
+                  type="radio"
+                  name="subscription"
+                  className="subYes"
+                  onChange={() => {props.receiveNotifications(props.username)}}
+                />
+    subNoInput = <input
+                  type="radio"
+                  name="subscription"
+                  className="subNo"
+                  checked
+                  onChange={() => {props.stopNotifications(props.username)}}
+                />
+  }
+
   return (
     <div>
       <a className ="button is-1 is-info" style={style.closebtn}onClick={() => toggleNav()}><i className="fa fa-circle-o-notch" aria-hidden="true"></i></a>
@@ -94,21 +126,11 @@ const Sidebar = (props) => {
             <p>Subscription Preference</p>
             <div className="control">
               <label htmlFor="" className="radio">
-                <input
-                  type="radio"
-                  name="subscription"
-                  className="subYes"
-                  onChange={() => {props.receiveNotifications(props.username)}}
-                />
+                {subYesInput}
                 Yes
               </label>
               <label htmlFor="" className="radio">
-                <input
-                  type="radio"
-                  name="subscription"
-                  className="subNo"
-                  onChange={() => {props.stopNotifications(props.username)}}
-                />
+                {subNoInput}
                 No
               </label>
             </div>
