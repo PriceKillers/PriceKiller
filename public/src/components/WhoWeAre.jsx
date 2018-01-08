@@ -28,7 +28,7 @@ export default class WhoWeAre extends React.Component {
               Who We Are
             </p>
             <ul>
-              <li><a href="https://www.linkedin.com/in/brian-binder-48b80080"><strong>Brian Binder</strong></a> - Project Manager - bbinder912@gmail.com - <a href="https://github.com/pray4mojo"><i className="fa fa-github" aria-hidden="true"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/brian-binder912"><strong>Brian Binder</strong></a> - Project Manager - bbinder912@gmail.com - <a href="https://github.com/pray4mojo"><i className="fa fa-github" aria-hidden="true"></i></a></li>
               <li><a href="https://www.linkedin.com/in/yazhikarman"><strong>Yazhi Karman</strong></a> - Scrum Master - dyazhi@gmail.com - <a href="https://github.com/yazhik12"><i className="fa fa-github" aria-hidden="true"></i></a></li>
               <li><strong>Luke Garner</strong> - Lead Engineer - lukegarner.ca@gmail.com - <a href="https://github.com/elgeesound"><i className="fa fa-github" aria-hidden="true"></i></a></li>
             </ul>
